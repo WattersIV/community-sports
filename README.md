@@ -67,13 +67,32 @@ Users can also create a game by using the create event form and filling in all t
 
 ## Setup
 1. Download the project folder.
-2. Install the packages by running `npm install` in both the front-end and the back-end folders.
-3. Setup psql database.
-4. Create data tables by running the file `/backend/src/db/schema/01_schema.sql`.
-5. Seed data tatbles by funning all the files in `/backend/src/db/seeds/` sequentially.
-6. Start the backend server by running `npm start` in the back-end folder.
-7. Start the front end page by running `npm start` in the front-end.
-8. Register for a new account.
+
+### Front End 
+
+1. Install the packages by running `npm install`.
+2. Create a Google API key that enables:
+* Distance Matrix API
+* Geocoding API
+* Maps Javascript API  
+3. Create `.env` file from `.env.example` file.
+4. Set the value of `REACT_APP_geocodeKey` to the Google API.
+
+### Back End
+1. Install the packages by running `npm install`.
+2. Create `.env.development` file from `.env.development.example` file.
+3. Set the value of `geocodeKey` to the Google API.
+
+### Database
+1. Install Postgresql if not previously installed.
+2. Create database named `community_sports`.
+3. Create data tables by running the file `/backend/src/db/schema/01_schema.sql`.
+4. Seed data tatbles by funning all the files in `/backend/src/db/seeds/` sequentially.
+
+### Start up
+1. Start the backend server by running `npm start` in the back-end folder.
+2. Start the front end page by running `npm start` in the front-end.
+3. Register for a new account.
 
 
 
