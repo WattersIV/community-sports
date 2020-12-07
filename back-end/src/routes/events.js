@@ -121,7 +121,7 @@ module.exports = db => {
 
     const userId = req.params.user_id;
     const currentDate = new Date();
-    console.log("GET /events/users/:user_id/past");
+   
     db.query(`
       SELECT e.*, u.first_name, u.last_name FROM events AS e
       JOIN users AS u ON u.id = e.owner_id

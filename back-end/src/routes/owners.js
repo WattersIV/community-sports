@@ -75,7 +75,7 @@ module.exports = db => {
     //Retriving lat and long from google api
     return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${geocodeAddress},+${geocodeCity},+CA&key=${process.env.geocodeKey}`)
       .then((res) => {
-        console.log(res.data)
+       
         const lat = res.data.results[0].geometry.location.lat
         const long = res.data.results[0].geometry.location.lng
         //Creating (x,y) format needed for psql point data type in psql
@@ -100,7 +100,7 @@ module.exports = db => {
       })
       //When it fails
       .catch((err) => {
-        console.log(err)
+      
         res.send('Error')
       })
 

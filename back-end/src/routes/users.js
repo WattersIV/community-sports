@@ -22,7 +22,6 @@ module.exports = db => {
      [eventId, id, Number(teamNumber), position])
     .then(({rows}) => {
       const eventId = rows[0].event_id;
-      console.log('event_id', eventId);
       return db.query(`
         SELECT event_id, COUNT(*) as current_participants FROM teams 
         WHERE event_id = $1
@@ -30,7 +29,7 @@ module.exports = db => {
       `,[eventId]) 
     })
     .then(({rows}) => {
-      console.log('after 2nd query', rows);
+      
       const { event_id, current_participants } = rows[0];
       db.query(`
         UPDATE events 
@@ -43,7 +42,7 @@ module.exports = db => {
       res.send('okay');
     })
     .catch(error => {
-      console.log(error);
+      
       res.send(error);
     });
   });
@@ -89,7 +88,7 @@ module.exports = db => {
        `,[eventId]) })
       .then(({rows}) => {
         const { event_id, current_participants } = rows[0];
-        console.log('after 2nd query');
+       
         db.query(`
           UPDATE events 
           SET current_participants = $1
@@ -101,7 +100,7 @@ module.exports = db => {
         res.send('delete okay');
       })
       .catch(error => {
-        console.log(error);
+       
         res.send(error);
       });
      

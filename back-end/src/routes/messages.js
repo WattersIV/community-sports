@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 module.exports = db => {
   router.get("/messages/:user_id", (req, res) => { 
-    console.log('GET messages');    
+     
     const userId = req.params.user_id;
 
 
@@ -19,14 +19,13 @@ module.exports = db => {
     [userId]
   )
     .then((data) => {
-      // console.log(data);
+   
       res.send(data.rows);
     }) 
   });
 
   router.post("/messages", (req, res) => { 
-    console.log('POST message');
-    console.log(req.body);
+   
     const { senderId, recipientId, body } = req.body;
     
     return db.query(`

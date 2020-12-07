@@ -11,9 +11,7 @@ module.exports = db => {
       response.json(users);
     });
   });
-  router.get ("/test", (req, res) => {
-    res.json('It works')
-  }) 
+ 
   router.get("/checkdb/events", (request, response) => {
     db.query(
       `

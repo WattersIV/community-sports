@@ -2,7 +2,7 @@ import { Redirect, useRouteMatch, Link } from 'react-router-dom';
 import axios from 'axios';
 import { React, useState, useEffect } from 'react';
 import EventFilter from './EventFilter';
-import NavBar from '../NavBar/NavBar';
+// import NavBar from '../NavBar/NavBar';
 
 import { Button } from 'react-bootstrap';
 import { Navbar, Nav } from 'react-bootstrap/';
@@ -160,7 +160,6 @@ export default function EventsIndex(props) {
     }
     return eventsByDate;
   }
-
 
   let subsetEvents;
 

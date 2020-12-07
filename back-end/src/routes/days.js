@@ -12,9 +12,9 @@ module.exports = db => {
       response.json(days);
     });
   });
-  router.get ("/test", (req, res) => {
-    res.json('It works')
-  })
+  // router.get ("/test", (req, res) => {
+  //   res.json('It works')
+  // })
 
   return router;
 };

@@ -17,11 +17,10 @@ In the event details page, users can see the details of the game along with the 
 
 !['Game Details'](./docs/event-details.png)
 
+Users can also choose a position which they would like to play.
+!['Create Games'](./docs/pick-position.png)
+
 Additionally, the users can contact the game owner through private messaging. Potential referees can use this feature to chat with the owners about the details, and possibly negotiate a price.
-
-!['Create Games'](./docs/create-event.png)
-Users can also create a game by using the create event form and filling in all the required information.
-
 !['Private Messaging'](./docs/messaging.png)
 ## Packages
 ### Front-end

@@ -10,11 +10,10 @@ import {
 import Login from './Login/LoginForm'
 import EventId from './EventId/eventId'
 import Register from './Register/RegisterForm'
-import ProfileForm from './Profile/ProfileForm'
 import EventsIndex from './Events/EventsIndex';
 import MyEventsIndex from './MyEvents/MyEventsIndex';
 import Message from './Message/Message';
-import Test from './Test/Test';
+// import Test from './Test/Test';
 import Main from './Main/Main';
 import EditEvent from './Events/EditEvent'
 import CreateEvent from './Events/CreateEvent'
@@ -53,10 +52,6 @@ export default function App(props) {
           <Route path='/register'>
             <Register islogin={islogin} setisLogin={setisLogin} />
           </Route> 
-          <Route exact path='/profile'>
-            <ProfileForm  currentUser = {currentUser}
-            /> 
-          </Route>
           <Route exact path='/events' > 
            <EventsIndex  
             currentUser = {currentUser}/> 
@@ -67,9 +62,9 @@ export default function App(props) {
           <Route exact path='/messages' >
           <Message />
           </Route>
-          <Route exact path='/test' >
+          {/* <Route exact path='/test' >
           <Test />
-        </Route>
+        </Route> */}
           
         <Route exact path='/my-events/:screen' > 
           < MyEventsIndex currentUser = {currentUser}/>
