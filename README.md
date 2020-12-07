@@ -86,6 +86,7 @@ Users can also create a game by using the create event form and filling in all t
 ### Database
 1. Install Postgresql if not previously installed.
 2. Create database named `community_sports`.
+3. Enter the `PGUSER` and `PGPASSWORD` values in `.env.development` based on your Postgresql setting.
 3. Create data tables by running the file `/backend/src/db/schema/01_schema.sql`.
 4. Seed data tables by running all the files in `/backend/src/db/seeds/` sequentially.
 
