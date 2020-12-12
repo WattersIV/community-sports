@@ -49,7 +49,6 @@ export default function EventsIndex(props) {
     fetch(proxyurl + URL)
       .then(response => response.text())
       .then(data => {
-        console.log(data)
         return data ? JSON.parse(data) : {}
       })
       .then(data => {

@@ -1,22 +1,28 @@
-  const jwt = require('jsonwebtoken')
-const router = require("express").Router(); 
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const router = require("express").Router();
 module.exports = db => {
-  router.post("/login", (req, res) => { 
-    const {email, password} = req.body 
+  router.post("/login", async (req, res) => {
+    const { email, password } = req.body
     db.query(`
-      SELECT id, first_name, last_name 
+      SELECT *
       FROM users 
-      WHERE email= $1 AND password=$2
+      WHERE email= $1 
       `
-    , [email, password])
-    .then(({rows}) => {
-      if (rows.length !== 0) {
-        req.session.user_id = rows[0].id 
-      } else {
-        res.json(rows[0])
-      }
-      res.json(rows[0]) 
-    })
+      , [email])
+      .then(async ({ rows }) => {
+        if (rows.length !== 0) {
+          if (await bcrypt.compare(password, rows[0].password)) {
+            req.session.id = rows[0].id
+            res.send('Success')
+          } else {
+            res.send('Invalid email or password')
+          }
+        } else {
+          return res.status(400).send('There is not a user with the provided email')
+        }
+      })
   })
   return router;
 }
+
