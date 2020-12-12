@@ -34,6 +34,7 @@ module.exports = function application(
   app.use(cors({origin:'http://localhost:3000', credentials:true}));
   app.use(helmet());
   app.use(bodyparser.json());
+  app.use(express.json())
 
   app.use("/api", checkdb(db));
   app.use("/api", register(db)); 
