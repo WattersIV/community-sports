@@ -22,7 +22,6 @@ export default function Login (props) {
     axios.post('http://localhost:8001/api/login', { email, password },{withCredentials:true})
     .then((res) =>
     { 
-      console.log(res)
       window.localStorage.setItem('userData', JSON.stringify(res.data)) 
        if(res.data === "Invalid email or password") {
          setError(res.data)

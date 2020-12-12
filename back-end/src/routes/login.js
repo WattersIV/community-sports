@@ -13,7 +13,8 @@ module.exports = db => {
       .then(async ({ rows }) => {
         if (rows.length !== 0) {
           if (await bcrypt.compare(password, rows[0].password)) {
-            req.session.id = rows[0].id
+            console.log(rows[0].id)
+            req.session.user_id = rows[0].id
             res.send('Success')
           } else {
             res.send('Invalid email or password')
@@ -21,6 +22,9 @@ module.exports = db => {
         } else {
           return res.status(400).send('There is not a user with the provided email')
         }
+      })
+      .catch((err) => {
+        res.status(500).send(err)
       })
   })
   return router;
