@@ -22,10 +22,9 @@ module.exports = db => {
           `
           , [userInfo.first_name, userInfo.last_name, userInfo.email, userInfo.password, userInfo.phone, userInfo.age, userInfo.gender ]
         ) .then(({rows}) => { 
-            console.log(req.session)
-            const id = rows[0].id
-            req.session.user_id = id //saves user as as cookie
-            console.log(req.session.user_id)
+            console.log('Register before cookie set', req.session)
+            req.session.user_id = rows[0].id //saves user as as cookie
+            console.log('Register after cookie set', req.session.user_id)
             //returning the whole user object 
             res.send(rows[0]) 
          }) 

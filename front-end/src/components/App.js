@@ -21,18 +21,20 @@ import { useState , useEffect} from 'react';
 import './App.scss';
 
 export default function App(props) {
-
-
   const [islogin, setisLogin] = useState(false)
-  const [currentUser, setCurrentUser] = useState(JSON.parse(window.localStorage.getItem('userData')));
+  const [currentUser, setCurrentUser] = useState({})//JSON.parse(window.localStorage.getItem('userData')));
 
   //console.log('before useEffect', currentUser)
 
-  useEffect(() => {
-      axios.get('http://localhost:8001/api/cookies', {withCredentials:true}).then((res) => 
-      { 
-        
+  useEffect(async () => {
+      await axios.get('http://localhost:8001/api/cookies', {withCredentials:true})
+      .then((res) => 
+      {
+        console.log('INSIDE APP', res)
         return setCurrentUser(res.data)        
+      })
+      .catch((err) => {
+        console.log(err)
       })
     },[islogin])
     
