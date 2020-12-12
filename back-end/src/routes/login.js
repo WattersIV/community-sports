@@ -13,7 +13,6 @@ module.exports = db => {
       .then(async ({ rows }) => {
         if (rows.length !== 0) {
           if (await bcrypt.compare(password, rows[0].password)) {
-            console.log(rows[0].id)
             req.session.user_id = rows[0].id
             res.send('Success')
           } else {
