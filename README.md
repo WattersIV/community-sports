@@ -8,6 +8,12 @@ With this app, users can propose a soccer game in their neighbourhood. They can 
 
 Additionally, game owners can also specify whether the game will be referreed. Locals who are interested in refereeing can participate in the game as a referee. They can contact the owner with the private chat feature to discuss the details.
 
+## Stack 
+Postgresql 
+Express 
+React 
+Nodejs
+
 ## Walk-through
 After login or register, the user will be directed to the events index page. It lists all the games proposed by all users. Users can use the filter on the left to show only the games that fulfill the specified criteria (gender restriction, location,  skill level, and whether the game is refereed).
 
@@ -49,7 +55,9 @@ Users can also create a game by using the create event form and filling in all t
 * web-vitals
 
 ### Backend
--Node Version 10.20.1
+- Node Version 10.20.1
+- Postgresql Version 12
+- Express Version 4.17.1
 ### Packages
 * axios
 * bcrypt
