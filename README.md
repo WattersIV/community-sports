@@ -23,8 +23,9 @@ Additionally, the users can contact the game owner through private messaging. Po
 Users can also create a game by using the create event form and filling in all the required information.
 
 !['Private Messaging'](./docs/messaging.png)
-## Packages
 ### Front-end
+- React Version 17.0.1
+### Packages
 * @material-ui/core
 * @material-ui/lab
 * axios
@@ -48,6 +49,8 @@ Users can also create a game by using the create event form and filling in all t
 * web-vitals
 
 ### Backend
+-Node Version 10.20.1
+### Packages
 * axios
 * bcrypt
 * body-parser
