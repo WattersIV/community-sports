@@ -18,6 +18,7 @@ app.use(cookieSession({
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }));
 
+//Routes
 const checkdb = require("./routes/checkdb"); 
 const register = require("./routes/register");
 const login = require("./routes/login");

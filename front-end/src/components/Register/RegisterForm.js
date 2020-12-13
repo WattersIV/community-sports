@@ -15,7 +15,6 @@ export default function Register(props) {
     phone: "",
     age: "",
     gender: "",
-    id: 0
   })
   const registration = async () => {
     await axios.post('http://localhost:8001/api/register', user)

@@ -3,7 +3,7 @@ const router = require("express").Router();
 
 module.exports = db => {
   router.get("/cookies", (req, res) => {
-    console.log('Im in da cookies', req.session.user_id)
+    console.log(req.session.user_id) // returns undefinded on first try 
     db.query(`
     SELECT id, first_name, last_name 
     FROM users 
