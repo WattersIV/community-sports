@@ -21,16 +21,13 @@ app.use(cookieSession({
 //Routes
 const checkdb = require("./routes/checkdb"); 
 const register = require("./routes/register");
-const login = require("./routes/login");
 const events = require("./routes/events");
 const owners = require("./routes/owners");
 const users = require("./routes/users");
-const logout = require("./routes/logout"); 
 const cookies = require("./routes/cookies")
 const messages = require("./routes/messages");
-const verify = require("jsonwebtoken/verify");
-const isVerify = require("./routes/is-verify");
-const dashboard = require("./routes/dashboard.js");
+const jwtAuth = require("./routes/jwtAuth")
+const dashboard = require("./routes/dashboard");
 
 
 module.exports = function application(
@@ -42,17 +39,15 @@ module.exports = function application(
   app.use(bodyparser.json());
   app.use(express.json())
 
-  app.use("/api", checkdb(db));
-  app.use("/api", register(db)); 
-  app.use("/api", login(db));
-  app.use("/api", logout(db));
-  app.use("/api", events(db));
-  app.use("/api", owners(db));
-  app.use("/api", users(db));
-  app.use("/api", cookies(db));
-  app.use("/api", messages(db));
-  app.use("/api", isVerify(db));
-  app.use("./api", dashboard(db));
+  app.use("/api", checkdb);
+  app.use("/api", register); 
+  app.use("/api", events);
+  app.use("/api", owners);
+  app.use("/api", users);
+  app.use("/api", cookies);
+  app.use("/api", messages);
+  app.use("/api", jwtAuth);
+  app.use("/api", dashboard);
 
   app.close = function() {
     return db.end();

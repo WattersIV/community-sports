@@ -2,8 +2,8 @@ const bcrypt = require('bcrypt');
 const jwtGenerator = require('../utils/jwtGenerator');
 const validInfo = require('../middleware/validInfo');
 const router = require("express").Router();
+const db = require("../db")
 
-module.exports = db => {
   router.post("/login", validInfo, async (req, res) => {
     try {
       //Destructure the body
@@ -37,6 +37,5 @@ module.exports = db => {
       res.status(500).send("Server Error")
     }
   })
-  return router;
-}
 
+module.exports = router

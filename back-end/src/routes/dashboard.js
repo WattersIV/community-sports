@@ -1,8 +1,7 @@
 const router = require("express").Router()
-const pool = require("../db")
 const authorization = require("../middleware/authorization")
+const db = require("../db")
 
-module.exports = db => {
   router.get("/dashboard", authorization, async (req, res) => {
     try {
       //Get currently logged in user
@@ -19,5 +18,5 @@ module.exports = db => {
       res.status(500).json("Server Error")
     }
   })
-  return router
-}
+
+module.exports = router

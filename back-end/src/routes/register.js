@@ -3,9 +3,9 @@ const bcrypt = require("bcrypt")
 const jsonwebtoken = require("jsonwebtoken")
 const jwtGenerator = require("../utils/jwtGenerator")
 const validInfo = require('../middleware/validInfo');
+const db = require("../db")
 
 
-module.exports = db => {
   router.post("/register", validInfo,  async (req, res) => {
     try {
       //Destructure Body
@@ -40,7 +40,6 @@ module.exports = db => {
       res.status(500).send("Server Error")
     }
   })
-  return router;
-}
 
+module.exports = router
 

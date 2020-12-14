@@ -1,6 +1,7 @@
 const router = require("express").Router();
+const db = require("../db")
 
-module.exports = db => {
+
   router.get("/messages/:user_id", (req, res) => { 
      
     const userId = req.params.user_id;
@@ -54,5 +55,4 @@ module.exports = db => {
     .catch(err => console.log(err))
   })
 
-  return router
-}
+module.exports = router

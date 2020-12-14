@@ -1,7 +1,6 @@
 const router = require("express").Router();
+const db = require("../db")
 
-
-module.exports = db => {
   router.get("/cookies", (req, res) => {
     console.log(req.session.user_id) // returns undefinded on first try 
     db.query(`
@@ -17,5 +16,5 @@ module.exports = db => {
         res.status(500).send(err)
       })
   })
-  return router
-}
+
+  module.exports = router

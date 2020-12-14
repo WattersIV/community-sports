@@ -1,8 +1,8 @@
 const router = require("express").Router()
 const authorization = require("../middleware/authorization")
 
-module.exports = db => {
-  router.get("/is-verify", authorization, async (req, res) => {
+  router.post("/verify", authorization, async (req, res) => {
+    console.log(typeof authorization)
     try {
       res.json(true)
     } catch (err) {
@@ -10,5 +10,5 @@ module.exports = db => {
       res.status(500).send("Server Error")
     }
   })
-  return router
-}
+
+module.exports = router
