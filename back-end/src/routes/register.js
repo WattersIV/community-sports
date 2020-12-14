@@ -1,38 +1,45 @@
 const router = require("express").Router()
 const bcrypt = require("bcrypt")
+const jsonwebtoken = require("jsonwebtoken")
+const jwtGenerator = require("../utils/jwtGenerator")
 
 
 module.exports = db => {
-  router.post("/register", (req, res) => {
-    const {email, password} = req.body
-    db.query(`SELECT * FROM users WHERE email=$1`, 
-    [email]) 
-    .then( async (user) => {
-      //If user exists stop and send email already exists
-      if (user.rows[0]) {
-        res.send('Email already in use')
-        //if user email does not exist add to DB
+  router.post("/register", async (req, res) => {
+    try {
+      //Destructure Body
+      const { email, password } = req.body
+      //Check if email in use
+      const user = await db.query(`SELECT * FROM users WHERE email=$1`,
+        [email])
+
+      //If email is in use
+      if (user.rows.length !== 0) {
+        return res.status(401).send("Email already in use")
       } else {
         const hashedPassword = await bcrypt.hash(password, 10)
-        const userInfo = {...req.body, password: hashedPassword}
-        db.query(`
-          INSERT INTO users (first_name, last_name, email, password, phone, age, gender) 
-          VALUES ($1::text, $2::text, $3::text, $4::text, $5::text, $6::integer, $7::text)
-          RETURNING id, first_name, last_name;
-          `
-          , [userInfo.first_name, userInfo.last_name, userInfo.email, userInfo.password, userInfo.phone, userInfo.age, userInfo.gender ]
-        ) .then(({rows}) => { 
-            console.log('Register before cookie set', req.session)
-            req.session.user_id = rows[0].id //saves user as as cookie
-            console.log('Register after cookie set', req.session.user_id)
-            //returning the whole user object 
-            res.send(rows[0]) 
-         }) 
-          .catch((err) => {
-            res.status(500).send(err)
-          })
-        }
-      })  
-    })
+        const userInfo = { ...req.body, password: hashedPassword }
+        //Put user into the db
+        const newUser = await db.query(`
+        INSERT INTO users (first_name, last_name, email, password, phone, age, gender) 
+        VALUES ($1::text, $2::text, $3::text, $4::text, $5::text, $6::integer, $7::text)
+        RETURNING id, first_name, last_name;
+        `
+          , [userInfo.first_name, userInfo.last_name, userInfo.email, userInfo.password, userInfo.phone, userInfo.age, userInfo.gender]
+        )
+
+        //create jwt
+        const token = jwtGenerator(newUser.rows[0].id)
+
+        res.json({ token })
+      }
+
+    } catch (err) {
+      console.error(err.message)
+      res.status(500).send("Server Error")
+    }
+  })
   return router;
 }
+
+
