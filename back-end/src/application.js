@@ -27,7 +27,11 @@ const owners = require("./routes/owners");
 const users = require("./routes/users");
 const logout = require("./routes/logout"); 
 const cookies = require("./routes/cookies")
-const messages = require("./routes/messages")
+const messages = require("./routes/messages");
+const verify = require("jsonwebtoken/verify");
+const isVerify = require("./routes/is-verify");
+const dashboard = require("./routes/dashboard.js");
+
 
 module.exports = function application(
   ENV,
@@ -45,8 +49,10 @@ module.exports = function application(
   app.use("/api", events(db));
   app.use("/api", owners(db));
   app.use("/api", users(db));
-  app.use("/api", cookies(db))
-  app.use("/api", messages(db))
+  app.use("/api", cookies(db));
+  app.use("/api", messages(db));
+  app.use("/api", isVerify(db));
+  app.use("./api", dashboard(db));
 
   app.close = function() {
     return db.end();
