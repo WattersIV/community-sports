@@ -2,10 +2,11 @@ const router = require("express").Router()
 const bcrypt = require("bcrypt")
 const jsonwebtoken = require("jsonwebtoken")
 const jwtGenerator = require("../utils/jwtGenerator")
+const validInfo = require('../middleware/validInfo');
 
 
 module.exports = db => {
-  router.post("/register", async (req, res) => {
+  router.post("/register", validInfo,  async (req, res) => {
     try {
       //Destructure Body
       const { email, password } = req.body

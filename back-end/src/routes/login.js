@@ -1,8 +1,10 @@
 const bcrypt = require('bcrypt');
 const jwtGenerator = require('../utils/jwtGenerator');
+const validInfo = require('../middleware/validInfo');
 const router = require("express").Router();
+
 module.exports = db => {
-  router.post("/login", async (req, res) => {
+  router.post("/login", validInfo, async (req, res) => {
     try {
       //Destructure the body
       const { email, password } = req.body
