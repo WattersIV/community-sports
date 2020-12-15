@@ -1,5 +1,4 @@
 import { useState, React } from "react";
-import { Redirect } from "react-router-dom";
 import axios from 'axios';
 import { Form, Button, Navbar, Nav } from 'react-bootstrap';
 import './Login.scss';
@@ -10,6 +9,7 @@ export default function Login(props) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("")
 
+  //Event handler for login
   const userLoggedin = async e => {
     e.preventDefault()
     if (email === "") {
@@ -20,6 +20,7 @@ export default function Login(props) {
       setError("Password cannot be blank")
       return;
     }
+    //Validating user
     await axios.post('http://localhost:8001/api/login', { email, password }, { withCredentials: true })
       .then((res) => {
         if (res.data === "Invalid email or password") {
@@ -31,10 +32,9 @@ export default function Login(props) {
         }
       })
       .catch((err) => {
-        console.log(err)
       })
   }
-  
+
 
   return (
     <>

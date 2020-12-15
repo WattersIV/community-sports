@@ -2,7 +2,6 @@ import { Redirect, useRouteMatch, Link } from 'react-router-dom';
 import axios from 'axios';
 import { React, useState, useEffect } from 'react';
 import EventFilter from './EventFilter';
-// import NavBar from '../NavBar/NavBar';
 
 import { Button } from 'react-bootstrap';
 import { Navbar, Nav } from 'react-bootstrap/';
@@ -13,10 +12,7 @@ import Loading from './Loading'
 import './Events.scss';
 
 export default function EventsIndex(props) {
-  const { path } = useRouteMatch();
   const [isLogout, setisLogout] = useState(false)
-
-
   const [allUpcomingEvents, setAllUpcomingEvents] = useState([{}]);
   const [allPastEvents, setAllPastEvents] = useState([{}]);
   const [myUpcomingEvents, setMyUpcomingEvents] = useState([{}]);
@@ -33,6 +29,8 @@ export default function EventsIndex(props) {
     //Distance Matrix API
     const proxyurl = "https://limitless-headland-00064.herokuapp.com/";
     let URL = `https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${coords[0]},${coords[1]}&destinations=`
+
+    //Making the url for the api with the coords of the locations
     locations.map((location, index) => {
       if (index === 0) {
         URL += `${location.x}%2C${location.y}`
@@ -40,11 +38,10 @@ export default function EventsIndex(props) {
         URL += `%7C${location.x}%2C${location.y}`
       }
     })
+
+    //Add url with api key
     URL += `&key=${process.env.REACT_APP_geocodeKey}`
-    const myInit = {
-      method: 'GET',
-      mode: 'no-cors',
-    }
+
     //Using proxy for this fetch
     fetch(proxyurl + URL)
       .then(response => response.text())
@@ -52,26 +49,29 @@ export default function EventsIndex(props) {
         return data ? JSON.parse(data) : {}
       })
       .then(data => {
+        //Setting distance arr with all of the values unordered
         const tempDistanceArr = data.rows[0].elements.map((event) => {
           return event.duration.text
         })
+        //Signal that we have recieved the distances
         setDistanceFlag(true)
+        //Add distance array into state
         setDistanceArr(tempDistanceArr)
         return tempDistanceArr
       })
   }
   useEffect(() => {
-    console.log(props)
-    const first = axios.get('http://localhost:8001/api/events')
-    const second = axios.get('http://localhost:8001/api/events/past')
-    const third = axios.get(`http://localhost:8001/api/events/users/${props.currentUser.id || 1}`)
-    const fourth = axios.get(`http://localhost:8001/api/events/users/${props.currentUser.id || 1}/past`)
+    const upcomingEvents = axios.get('http://localhost:8001/api/events')
+    const pastEvents = axios.get('http://localhost:8001/api/events/past')
+    const myUpcoming = axios.get(`http://localhost:8001/api/events/users/${props.currentUser.id}`)
+    const myPast = axios.get(`http://localhost:8001/api/events/users/${props.currentUser.id}/past`)
     Promise.all([
-      first,
-      second,
-      third,
-      fourth
+      upcomingEvents,
+      pastEvents,
+      myUpcoming,
+      myPast
     ]).then(all => {
+      //Setting the tpyes of events into states
       setAllUpcomingEvents(prev => all[0].data);
       setAllPastEvents(prev => all[1].data);
       setMyUpcomingEvents(prev => all[2].data);
@@ -120,14 +120,14 @@ export default function EventsIndex(props) {
   }, [categoryFilter, isUpcoming, isAllEvents, deletedEvent, props.currentUser])
 
 
-   const logout_validation = () => {
+  const logout_validation = () => {
     try {
       localStorage.removeItem("token")
       setisLogout(true)
     } catch (err) {
       console.error(err.message)
     }
-   };
+  };
 
   const deleteEvent = (id) => {
     axios.delete(`http://localhost:8001/api/owners/events/${id}/delete`)

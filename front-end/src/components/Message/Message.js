@@ -1,10 +1,10 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { ListGroup, Form, Button, Nav, Navbar } from 'react-bootstrap';
 import './Message.scss';
 import logo from './logo.png'
-export default function Messages(props)  {
+export default function Messages(props) {
   const location = useLocation();
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('userData')));
   const [messages, setMessages] = useState([]);
@@ -12,21 +12,16 @@ export default function Messages(props)  {
   const [contactList, setContactList] = useState(null);
   const [currentContact, setCurrentContact] = useState({});
   const [isLogout, setisLogout] = useState(false)
-  // const [conversation, setConversation] = useState([{}]);
   const [newMessageText, setNewMessageText] = useState('');
 
-  console.log('location', location);
-  // console.log('currentUser', currentUser);
 
   useEffect(() => {
-    console.log('useEffect fetch messages');
-    console.log('currentUser.id in useEffect', currentUser.id);
-
+    //Getting conversations specific to the user
     axios.get(`http://localhost:8001/api/messages/${currentUser.id}`)
-    .then((res) => {    
-      setMessages(() => res.data);
-    })
-  },[])
+      .then((res) => {
+        setMessages(() => res.data);
+      })
+  }, [])
 
   useEffect(() => {
     const obj = createMessageObj(currentUser.id, messages);
@@ -37,29 +32,26 @@ export default function Messages(props)  {
 
   useEffect(() => {
     //useEffect 0
-    if(location.state) {
+    if (location.state) {
       setCurrentContact(() => location.state);
-  }},[])
+    }
+  }, [])
 
   useEffect(() => {
-    // //useEffect 1
-    // console.log('useEffect1 currentContact', currentContact);
-    // console.log('useEffect1 contactList', contactList);
-
     if (currentContact.id && contactList && !contactList.find(contact => contact.id === currentContact.id)) {
       setContactList(prev => [currentContact, ...prev])
-    } 
-  },[currentContact, contactList])
+    }
+  }, [currentContact, contactList])
 
   useEffect(() => {
     if (!currentContact.id && contactList && contactList.length > 0) {
       setCurrentContact(() => contactList[0]);
     }
-  },[contactList])
+  }, [contactList])
 
-  function createMessageObj (user_id, messages) {
+  function createMessageObj(user_id, messages) {
     const result = {};
-    messages.forEach((message,index) => {
+    messages.forEach((message, index) => {
       if (message.sender_id !== user_id) {
         if (result[message.sender_id]) {
           result[message.sender_id].push(message);
@@ -78,7 +70,6 @@ export default function Messages(props)  {
   }
 
   function createContactList(user_id, messages) {
-    console.log('run createContactList');
     const contactList = [];
     messages.reverse().forEach(message => {
       const newContact = {};
@@ -98,11 +89,11 @@ export default function Messages(props)  {
     return contactList;
   }
 
-  function handleClick (obj) {
+  function handleClick(obj) {
     setCurrentContact(() => obj);
   }
 
-  function handleChange (e) {
+  function handleChange(e) {
     setNewMessageText(e.target.value)
   }
 
@@ -113,116 +104,112 @@ export default function Messages(props)  {
     }
 
     const reqBody = {
-      senderId: currentUser.id, 
-      recipientId: currentContact.id, 
+      senderId: currentUser.id,
+      recipientId: currentContact.id,
       body: newMessageText
     }
-    // console.log(reqBody);
     e.preventDefault();
     axios.post("http://localhost:8001/api/messages", reqBody)
-    .then(res => {
-      console.log("return data",res);
-      const messageId = res.data.message_id;
-      const sentMessage = {
-        id: messageId, 
-        sender_id: currentUser.id,
-        sender_first_name: currentUser.first_name,
-        sender_last_name: currentUser.last_name,
-        recipient_id: currentContact.id,
-        recipient_first_name: currentContact.first_name,
-        recipient_last_name: currentContact.last_name,
-      body:  newMessageText};
-      console.log('messages before append', messages);
-      const newMessageList = [...messages.reverse(), sentMessage]; 
-      console.log('newMessageList', newMessageList);
-      setMessages(() => newMessageList);
-    })
+      .then(res => {
+        const messageId = res.data.message_id;
+        const sentMessage = {
+          id: messageId,
+          sender_id: currentUser.id,
+          sender_first_name: currentUser.first_name,
+          sender_last_name: currentUser.last_name,
+          recipient_id: currentContact.id,
+          recipient_first_name: currentContact.first_name,
+          recipient_last_name: currentContact.last_name,
+          body: newMessageText
+        };
+        const newMessageList = [...messages.reverse(), sentMessage];
+        setMessages(() => newMessageList);
+      })
     setNewMessageText('');
   }
 
-  function compareObjectsById(a,b) {
+  function compareObjectsById(a, b) {
     return a.id > b.id ? 1 : -1;
   }
 
   const conversation = messageObj[currentContact.id] || [];
-  console.log('messages', messages);
-  console.log('messageObj', messageObj);
-  console.log('currentContact',currentContact);
-  console.log('contactList', contactList);
   function logout_validation() {
     axios.post('http://localhost:8001/api/logout', {}).then((res) => setisLogout(true))
   };
   if (isLogout) {
     return <Redirect to="/" />
-  }; 
+  };
 
-  return ( 
-  <> 
+  return (
+    <>
       <Navbar bg="light" expand="lg">
-         <Navbar.Brand href="/events"><img src={logo} alt="logo"/></Navbar.Brand>
-        {currentUser &&  <h3 className='display-name'> {currentUser.first_name} {currentUser.last_name} </h3>}
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Brand href="/events"><img src={logo} alt="logo" /></Navbar.Brand>
+        {currentUser && <h3 className='display-name'> {currentUser.first_name} {currentUser.last_name} </h3>}
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
           {currentUser &&
-           <>
-            <Link to="/owners/events/new">
-              <Button size="m"> Create New Event </Button></Link>
-                <Nav className="justify-content-end">
-                  <Button size="m" onClick={(event) => { event.preventDefault();
-                                                      logout_validation()}}>Logout</Button>
-               </Nav>
-          </>
-          }    
+            <>
+              <Link to="/owners/events/new">
+                <Button size="m"> Create New Event </Button></Link>
+              <Nav className="justify-content-end">
+                <Button size="m" onClick={(event) => {
+                  event.preventDefault();
+                  logout_validation()
+                }}>Logout</Button>
+              </Nav>
+            </>
+          }
         </Navbar.Collapse>
       </Navbar>
 
       <div className="message-page">
-      <div className="message-page-left">
+        <div className="message-page-left">
           <ListGroup>
-          {contactList && contactList.map(({id, first_name, last_name}) => {
-            return (
-              <ListGroup.Item
-                active={currentContact.id === id}
-                key={id}
-                onClick={() =>handleClick({id, first_name, last_name})}
+            {contactList && contactList.map(({ id, first_name, last_name }) => {
+              return (
+                <ListGroup.Item
+                  active={currentContact.id === id}
+                  key={id}
+                  onClick={() => handleClick({ id, first_name, last_name })}
                 >
-                {first_name} {last_name}
-              </ListGroup.Item>
-            )})
-          }
+                  {first_name} {last_name}
+                </ListGroup.Item>
+              )
+            })
+            }
           </ListGroup>
-      </div>
-      <div className="message-page-right flex-column">
-      
-        <div className="conversation">
+        </div>
+        <div className="message-page-right flex-column">
+
+          <div className="conversation">
             {conversation.sort(compareObjectsById).map((message, index) => {
               const messageClass = message.sender_id === currentUser.id ? "message-user" : "message-contact";
               const messageContainerClass = message.sender_id === currentUser.id ? "message-container-user" : "message-container-contact";
               return (
                 <div className={messageContainerClass}>
                   <div key={index} className={messageClass}>
-                  {message.body}
+                    {message.body}
                   </div>
                 </div>
               )
-              })
+            })
             }
-        </div>
-        <div>
-          <Form onSubmit={handleSubmit} className="new-message-form">
-          <Form.Control 
-          as="textarea" 
-          required value={newMessageText} 
-          onChange={handleChange}
-          style={{height:'20vh', margin: '2vh 0vh', resize:'none'}}
-          >
-          </Form.Control>
-          <Button id="message-submit" type="submit" variant="primary" block>Submit</Button>
-          </Form>
+          </div>
+          <div>
+            <Form onSubmit={handleSubmit} className="new-message-form">
+              <Form.Control
+                as="textarea"
+                required value={newMessageText}
+                onChange={handleChange}
+                style={{ height: '20vh', margin: '2vh 0vh', resize: 'none' }}
+              >
+              </Form.Control>
+              <Button id="message-submit" type="submit" variant="primary" block>Submit</Button>
+            </Form>
+          </div>
         </div>
       </div>
-    </div>
     </>
-    )
-    
+  )
+
 } 

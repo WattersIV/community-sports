@@ -1,5 +1,4 @@
 import './App.scss';
-import axios from 'axios';
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,7 +11,6 @@ import Register from './Register/RegisterForm'
 import EventsIndex from './Events/EventsIndex';
 import MyEventsIndex from './MyEvents/MyEventsIndex';
 import Message from './Message/Message';
-// import Test from './Test/Test';
 import Main from './Main/Main';
 import EditEvent from './Events/EditEvent'
 import CreateEvent from './Events/CreateEvent'
@@ -24,8 +22,8 @@ export default function App(props) {
   const [currentUser, setCurrentUser] = useState({})
 
   const checkAuthenticated = async () => {
-    console.log('checkAuth started')
     try {
+      //Checking if token sent is valid
       const res = await fetch("http://localhost:8001/api/verify", {
         method: "POST",
         headers: { jwt_token: localStorage.token }
@@ -34,29 +32,28 @@ export default function App(props) {
       const parseRes = await res.json();
       //Check if access is granted
       parseRes === true ? setisLogin(true) : setisLogin(false);
-      console.log('checkAuth done')
     } catch (err) {
       console.error(err.message);
     }
   };
 
   const getUser = async () => {
-    console.log('getUser Started', localStorage.token)
     try {
+      //Getting users information with their credientials
       const response = await fetch("http://localhost:8001/api/dashboard", {
-        method: "GET", 
-        headers: { jwt_token: localStorage.token}
+        method: "GET",
+        headers: { jwt_token: localStorage.token }
       })
       const parseData = await response.json()
+      //Set user data in state
       setCurrentUser(parseData)
-      console.log('getUser done', parseData)
     } catch (err) {
       console.error(err.message)
     }
   }
 
   useEffect(() => {
-    console.log('I run')
+    //Get and save jwt key first then get user info with it
     const authAndInfo = async () => {
       await checkAuthenticated();
       getUser()
@@ -80,11 +77,12 @@ export default function App(props) {
                   setisLogin={setisLogin}
                   currentUser={currentUser}
                   setCurrentUser={setCurrentUser}
-                  />
+                />
               ) : (
                   <Redirect to={{
-                    pathname:"/events", 
-                    state: {currentUser: currentUser}}} />
+                    pathname: "/events",
+                    state: { currentUser: currentUser }
+                  }} />
                 )}
           />
           <Route path='/register'>
@@ -100,10 +98,6 @@ export default function App(props) {
           <Route exact path='/messages' >
             <Message />
           </Route>
-          {/* <Route exact path='/test' >
-          <Test />
-        </Route> */}
-
           <Route exact path='/my-events/:screen' >
             < MyEventsIndex currentUser={currentUser} />
           </Route >

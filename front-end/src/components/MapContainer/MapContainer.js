@@ -1,4 +1,4 @@
-import { React, Component, useState } from 'react';
+import { React, Component} from 'react';
 import './map.scss'
 import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
 require('dotenv').config()
@@ -31,7 +31,7 @@ export class MapContainer extends Component {
     if (this.state.showingInfoWindow) {
       this.setState({
         showingInfoWindow: false,
-        activeMarker: null, 
+        activeMarker: null,
         selectedPlace: {}
       });
     }

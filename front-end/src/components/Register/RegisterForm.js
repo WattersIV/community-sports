@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { Redirect } from "react-router-dom";
 import { Form, Button, Navbar, Nav } from 'react-bootstrap';
 import './Register.scss'
-import { toast } from "react-toastify";
 import logo from './logo.png';
 
 export default function Register(props) {
@@ -18,21 +16,21 @@ export default function Register(props) {
     gender: "",
   })
 
-  const registration =  async (e) => {
+  //Event handler for register
+  const registration = async (e) => {
     e.preventDefault()
     await axios.post('http://localhost:8001/api/register', user)
-    .then((res) => {
-      if(res.data === "Email already in use") {
-        setError(res.data)
-        props.setisLogin(false)
-      } else {
-        console.log(res.data.token)
-        localStorage.setItem("token", res.data.token)
-        props.setisLogin(true)
-      }
-    })
+      .then((res) => {
+        if (res.data === "Email already in use") {
+          setError(res.data)
+          props.setisLogin(false)
+        } else {
+          localStorage.setItem("token", res.data.token)
+          props.setisLogin(true)
+        }
+      })
   }
-    
+
 
 
   return (
