@@ -20,11 +20,18 @@ export default function Login(props) {
       return;
     }
     await axios.post('http://localhost:8001/api/login', { email, password }, { withCredentials: true })
-      .then((res) => {
+      .then( async (res) => {
         if (res.data === "Invalid email or password") {
           setError(res.data)
         } else {
           props.setisLogin(true);
+          await axios.get('http://localhost:8001/api/cookies', { withCredentials: true })
+          .then((user) => {
+            props.setCurrentUser(user)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
         }
       })
       .catch((err) => {
@@ -32,9 +39,6 @@ export default function Login(props) {
       })
   }
   
-  if (props.islogin) {
-    return <Redirect to="/events" />
-  };
 
   return (
     <>

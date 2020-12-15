@@ -20,7 +20,6 @@ app.use(cookieSession({
 
 //Routes
 const checkdb = require("./routes/checkdb"); 
-const register = require("./routes/register");
 const events = require("./routes/events");
 const owners = require("./routes/owners");
 const users = require("./routes/users");
@@ -40,7 +39,6 @@ module.exports = function application(
   app.use(express.json())
 
   app.use("/api", checkdb);
-  app.use("/api", register); 
   app.use("/api", events);
   app.use("/api", owners);
   app.use("/api", users);

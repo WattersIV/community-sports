@@ -23,18 +23,22 @@ export default function App(props) {
   const [islogin, setisLogin] = useState(false)
   const [currentUser, setCurrentUser] = useState({})//JSON.parse(window.localStorage.getItem('userData')));
 
-  useEffect(async () => {
-    await axios.get('http://localhost:8001/api/cookies', { withCredentials: true })
-      .then((res) => {
-        console.log('INSIDE APP', res)
-        return setCurrentUser(res.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [islogin])
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const cookies = await axios.get('http://localhost:8001/api/cookies', { withCredentials: true })
+  //       .then((cookies) => {
+  //         console.log('INSIDE APP', cookies)
+  //         setCurrentUser(cookies) 
+  //       })
+  //       .catch((err) => {
+  //         console.log(err)
+  //       })
+  //   }
+  //   fetchData()
+  // }, [islogin])
 
   //console.log('after useEffect', currentUser)
+
   return (
     <div className="App">
       <Router>
@@ -45,7 +49,9 @@ export default function App(props) {
           <Route path='/login'>
             <Login
               islogin={islogin}
-              setisLogin={setisLogin} />
+              setisLogin={setisLogin}
+              currentUser={currentUser}
+              setCurrentUser={setCurrentUser} />
           </Route>
           <Route path='/register'>
             <Register islogin={islogin} setisLogin={setisLogin} />

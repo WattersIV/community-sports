@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Redirect } from "react-router-dom";
 import { Form, Button, Navbar, Nav } from 'react-bootstrap';
 import './Register.scss'
+import { toast } from "react-toastify";
 import logo from './logo.png';
 
 export default function Register(props) {
@@ -16,19 +17,22 @@ export default function Register(props) {
     age: "",
     gender: "",
   })
-  const registration = async () => {
+
+  const registration =  async (e) => {
+    e.preventDefault()
     await axios.post('http://localhost:8001/api/register', user)
-      .then((res) => {
-        if (res.data === "Email already in use") {
-          setError(res.data)
-        } else {
-          props.setisLogin(true)
-        }
-      })
+    .then((res) => {
+      if(res.data === "Email already in use") {
+        setError(res.data)
+      } else {
+        console.log(res.data.token)
+        localStorage.setItem("token", res.data.token)
+        props.setisLogin(true)
+      }
+    })
   }
-  if (props.islogin) {
-    return <Redirect to="/events" id={user.id} first_name={user.first_name} last_name={user.last_name}/>
-  };
+    
+
 
   return (
     <>
@@ -45,10 +49,7 @@ export default function Register(props) {
         </Navbar>
       </div>
       <div className="Register">
-        <Form onSubmit={event => {
-          event.preventDefault();
-          registration()
-        }}>
+        <Form onSubmit={registration}>
           <Form.Group size="lg" controlId="formGroupFirstName">
             <Form.Control
               type="first_name"
@@ -77,7 +78,7 @@ export default function Register(props) {
             <Form.Control
               type="Password"
               value={user.password}
-              placeholder="password"
+              placeholder="Password"
               onChange={(event) => setUser({ ...user, password: event.target.value })}
             />
           </Form.Group>
