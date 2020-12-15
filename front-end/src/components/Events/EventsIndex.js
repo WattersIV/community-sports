@@ -61,6 +61,7 @@ export default function EventsIndex(props) {
       })
   }
   useEffect(() => {
+    console.log(props)
     const first = axios.get('http://localhost:8001/api/events')
     const second = axios.get('http://localhost:8001/api/events/past')
     const third = axios.get(`http://localhost:8001/api/events/users/${props.currentUser.id || 1}`)

@@ -24,6 +24,7 @@ export default function App(props) {
   const [currentUser, setCurrentUser] = useState({})
 
   const checkAuthenticated = async () => {
+    console.log('checkAuth started')
     try {
       const res = await fetch("http://localhost:8001/api/verify", {
         method: "POST",
@@ -33,12 +34,14 @@ export default function App(props) {
       const parseRes = await res.json();
 
       parseRes === true ? setisLogin(true) : setisLogin(false);
+      console.log('checkAuth done')
     } catch (err) {
       console.error(err.message);
     }
   };
 
   const getUser = async () => {
+    console.log('getUser Started', localStorage.token)
     try {
       const response = await fetch("http://localhost:8001/api/dashboard", {
         method: "GET", 
@@ -46,18 +49,20 @@ export default function App(props) {
       })
       const parseData = await response.json()
       setCurrentUser(parseData)
-      console.log(parseData)
+      console.log('getUser done', parseData)
     } catch (err) {
       console.error(err.message)
     }
   }
 
   useEffect(() => {
-    checkAuthenticated();
-    getUser()
-  }, []);
-
-  //console.log('after useEffect', currentUser)
+    console.log('I run')
+    const authAndInfo = async () => {
+      await checkAuthenticated();
+      getUser()
+    }
+    authAndInfo()
+  }, [islogin]);
 
   return (
     <div className="App">
@@ -74,7 +79,8 @@ export default function App(props) {
                   islogin={islogin}
                   setisLogin={setisLogin}
                   currentUser={currentUser}
-                  setCurrentUser={setCurrentUser} />
+                  setCurrentUser={setCurrentUser}
+                  />
               ) : (
                   <Redirect to={{
                     pathname:"/events", 
