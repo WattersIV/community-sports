@@ -21,7 +21,7 @@ import './App.scss';
 
 export default function App(props) {
   const [islogin, setisLogin] = useState(false)
-  const [currentUser, setCurrentUser] = useState({})//JSON.parse(window.localStorage.getItem('userData')));
+  const [currentUser, setCurrentUser] = useState({})
 
   const checkAuthenticated = async () => {
     try {
@@ -38,8 +38,23 @@ export default function App(props) {
     }
   };
 
+  const getUser = async () => {
+    try {
+      const response = await fetch("http://localhost:8001/api/dashboard", {
+        method: "GET", 
+        headers: { jwt_token: localStorage.token}
+      })
+      const parseData = await response.json()
+      setCurrentUser(parseData)
+      console.log(parseData)
+    } catch (err) {
+      console.error(err.message)
+    }
+  }
+
   useEffect(() => {
     checkAuthenticated();
+    getUser()
   }, []);
 
   //console.log('after useEffect', currentUser)
@@ -61,7 +76,9 @@ export default function App(props) {
                   currentUser={currentUser}
                   setCurrentUser={setCurrentUser} />
               ) : (
-                  <Redirect to="/events" />
+                  <Redirect to={{
+                    pathname:"/events", 
+                    state: {currentUser: currentUser}}} />
                 )}
           />
           <Route path='/register'>

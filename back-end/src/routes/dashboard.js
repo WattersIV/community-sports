@@ -6,7 +6,7 @@ const db = require("../db")
     try {
       //Get currently logged in user
       const user = await db.query(`
-      SELECT first_name, last_name, gender, age, phone, email   
+      SELECT first_name, last_name, gender, age, phone, email, id   
       FROM users 
       WHERE id = $1`, 
       [req.user]

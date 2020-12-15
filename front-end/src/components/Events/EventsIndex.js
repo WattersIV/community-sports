@@ -56,15 +56,15 @@ export default function EventsIndex(props) {
           return event.duration.text
         })
         setDistanceFlag(true)
-        setDistanceArr(tempDistanceArr) 
+        setDistanceArr(tempDistanceArr)
         return tempDistanceArr
       })
   }
   useEffect(() => {
     const first = axios.get('http://localhost:8001/api/events')
     const second = axios.get('http://localhost:8001/api/events/past')
-    const third = axios.get(`http://localhost:8001/api/events/users/${props.currentUser.id}`)
-    const fourth = axios.get(`http://localhost:8001/api/events/users/${props.currentUser.id}/past`)
+    const third = axios.get(`http://localhost:8001/api/events/users/${props.currentUser.id || 1}`)
+    const fourth = axios.get(`http://localhost:8001/api/events/users/${props.currentUser.id || 1}/past`)
     Promise.all([
       first,
       second,
@@ -116,7 +116,7 @@ export default function EventsIndex(props) {
         }
       })
     })
-  }, [categoryFilter, isUpcoming, isAllEvents, deletedEvent])
+  }, [categoryFilter, isUpcoming, isAllEvents, deletedEvent, props.currentUser])
 
 
   function logout_validation() {
@@ -124,7 +124,7 @@ export default function EventsIndex(props) {
   };
 
   const deleteEvent = (id) => {
-    axios.delete(`http://localhost:8001/api/owners/events/${id}/delete`) 
+    axios.delete(`http://localhost:8001/api/owners/events/${id}/delete`)
     let newDeleted = [...deletedEvent, id]
     setDeletedEvents(newDeleted)
   }
@@ -132,9 +132,9 @@ export default function EventsIndex(props) {
   if (isLogout) {
     return <Redirect to="/" />
   };
-  
+
   //Check if the user is owner 
-  function checkOwner (event) {
+  function checkOwner(event) {
     if (event.owner_id === props.currentUser.id) {
       return true
     }
@@ -174,51 +174,51 @@ export default function EventsIndex(props) {
   const eventElements = Object.keys(eventsByDate).map((date, index) => {
     return (
       <div className="days" key={date}>
-          <h5 id="days">{new Date(date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h5>
+        <h5 id="days">{new Date(date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h5>
         {
           eventsByDate[date].map(event => {
             return (
               <div className="events">
-              <Card className='event'>
-                <Card.Link href={`/events/${event.id}`}>
-                <div id="card-top">
-                <Card.Header > {event.start_time && event.start_time.slice(0, 5)} - {event.end_time && event.end_time.slice(0, 5)}</Card.Header>
+                <Card className='event'>
+                  <Card.Link href={`/events/${event.id}`}>
+                    <div id="card-top">
+                      <Card.Header > {event.start_time && event.start_time.slice(0, 5)} - {event.end_time && event.end_time.slice(0, 5)}</Card.Header>
                       {distanceFlag && <Card.Header > {distanceFlag && distanceArr[index]} away </Card.Header>}
-                <Card.Header>{event.first_name} {event.last_name} </Card.Header>
-                </div>
-                <Card.Body >
-                  <Card.Title>{event.title}</Card.Title>
-                  <Card.Text>
-                    <small className="text-muted">{event.city}, {event.province}</small>
-                  </Card.Text>
-                  <div id="card-bottom">
-                    <Card.Text>
-                      {event.skill_level}
-                    </Card.Text>
-                   <Card.Text>
-                    {event.current_participants}/{event.max_participants}
-                    </Card.Text>
-                  </div>
-                </Card.Body>
-                </Card.Link>
-                
-                {checkOwner(event) && 
-                <>
-                <Card.Footer className="edit-delete_buttons">
-                  <Button block size="sm" onClick={(e) => {
-                    e.preventDefault();
-                    deleteEvent(event.id)
-                  }}> Delete </Button>
-                <Card.Link href={ `owners/events/${event.id}/edit` } > 
-                    <Button block size="sm"> Edit </Button>
-                </Card.Link> 
-                </Card.Footer>
-                </> }
-            </Card>
-          </div>
-          )
-        }) 
-      }
+                      <Card.Header>{event.first_name} {event.last_name} </Card.Header>
+                    </div>
+                    <Card.Body >
+                      <Card.Title>{event.title}</Card.Title>
+                      <Card.Text>
+                        <small className="text-muted">{event.city}, {event.province}</small>
+                      </Card.Text>
+                      <div id="card-bottom">
+                        <Card.Text>
+                          {event.skill_level}
+                        </Card.Text>
+                        <Card.Text>
+                          {event.current_participants}/{event.max_participants}
+                        </Card.Text>
+                      </div>
+                    </Card.Body>
+                  </Card.Link>
+
+                  {checkOwner(event) &&
+                    <>
+                      <Card.Footer className="edit-delete_buttons">
+                        <Button block size="sm" onClick={(e) => {
+                          e.preventDefault();
+                          deleteEvent(event.id)
+                        }}> Delete </Button>
+                        <Card.Link href={`owners/events/${event.id}/edit`} >
+                          <Button block size="sm"> Edit </Button>
+                        </Card.Link>
+                      </Card.Footer>
+                    </>}
+                </Card>
+              </div>
+            )
+          })
+        }
       </div>
     )
   });
@@ -227,36 +227,36 @@ export default function EventsIndex(props) {
   }
   return (
     <>
-    <div className="eventIndex">
-    <Navbar bg="light" expand="lg">
-      <Navbar.Brand href="/events"> <img src={logo} alt="logo"/> </Navbar.Brand>
-        {props.currentUser &&  <h3 className='display-name'> {props.currentUser.first_name} {props.currentUser.last_name} </h3>}
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        {props.currentUser &&
-         <>
-        <Link to="owners/events/new">
-        <Button size="m"> Create New Event </Button></Link>
-          <Nav className="justify-content-end">
-            <Button size="m" onClick={(event) => {
-              event.preventDefault();
-              logout_validation()
-            }}>Logout</Button> 
-          </Nav>
-          </>
-          }
-      </Navbar.Collapse>
-    </Navbar>
-    <Nav className="col-md-12 d-none d-md-block bg-light sidebar">
-      <EventFilter 
-        setCategoryFilter={setCategoryFilter} 
-        setIsUpcoming={setIsUpcoming} 
-        setIsAllEvents={setIsAllEvents}
-        />
-    </Nav>
-    {eventElements.length ? eventElements : <p>There's no event with your criteria.</p>}
-    </div>
-  </>
-    )
+      <div className="eventIndex">
+        <Navbar bg="light" expand="lg">
+          <Navbar.Brand href="/events"> <img src={logo} alt="logo" /> </Navbar.Brand>
+          {props.currentUser && <h3 className='display-name'> {props.currentUser.first_name} {props.currentUser.last_name} </h3>}
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            {props.currentUser &&
+              <>
+                <Link to="owners/events/new">
+                  <Button size="m"> Create New Event </Button></Link>
+                <Nav className="justify-content-end">
+                  <Button size="m" onClick={(event) => {
+                    event.preventDefault();
+                    logout_validation()
+                  }}>Logout</Button>
+                </Nav>
+              </>
+            }
+          </Navbar.Collapse>
+        </Navbar>
+        <Nav className="col-md-12 d-none d-md-block bg-light sidebar">
+          <EventFilter
+            setCategoryFilter={setCategoryFilter}
+            setIsUpcoming={setIsUpcoming}
+            setIsAllEvents={setIsAllEvents}
+          />
+        </Nav>
+        {eventElements.length ? eventElements : <p>There's no event with your criteria.</p>}
+      </div>
+    </>
+  )
 }
 
