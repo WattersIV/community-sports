@@ -32,7 +32,7 @@ export default function App(props) {
       });
 
       const parseRes = await res.json();
-
+      //Check if access is granted
       parseRes === true ? setisLogin(true) : setisLogin(false);
       console.log('checkAuth done')
     } catch (err) {

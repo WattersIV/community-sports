@@ -120,9 +120,14 @@ export default function EventsIndex(props) {
   }, [categoryFilter, isUpcoming, isAllEvents, deletedEvent, props.currentUser])
 
 
-  function logout_validation() {
-    axios.post('http://localhost:8001/api/logout', {}).then((res) => setisLogout(true))
-  };
+   const logout_validation = () => {
+    try {
+      localStorage.removeItem("token")
+      setisLogout(true)
+    } catch (err) {
+      console.error(err.message)
+    }
+   };
 
   const deleteEvent = (id) => {
     axios.delete(`http://localhost:8001/api/owners/events/${id}/delete`)

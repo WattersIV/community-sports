@@ -149,9 +149,15 @@ export default function EventId(props) {
   }, [setComments])
 
   //function trigered by logout button
-  function logout_validation() {
-    axios.post('http://localhost:8001/api/logout', {}).then((res) => setisLogout(true))
-  };
+  const logout_validation = () => {
+    try {
+      localStorage.removeItem("token")
+      setisLogout(true)
+    } catch (err) {
+      console.error(err.message)
+    }
+   };
+   
   if (isLogout) {
     return <Redirect to="/" />
   }; 
