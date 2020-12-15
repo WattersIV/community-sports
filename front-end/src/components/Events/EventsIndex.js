@@ -2,7 +2,6 @@ import { Redirect, useRouteMatch, Link } from 'react-router-dom';
 import axios from 'axios';
 import { React, useState, useEffect } from 'react';
 import EventFilter from './EventFilter';
-
 import { Button } from 'react-bootstrap';
 import { Navbar, Nav } from 'react-bootstrap/';
 import Card from 'react-bootstrap/Card'
@@ -112,7 +111,7 @@ export default function EventsIndex(props) {
           setPosition(pos)
           if (pos && selectedEvents.length !== 0) {
             //Get distance from user to event
-            const check = distanceApi(pos, locations)
+            distanceApi(pos, locations)
           }
         }
       })
@@ -158,9 +157,7 @@ export default function EventsIndex(props) {
   const makeEventsByDateObj = (events) => {
     let dates = [...new Set(events.map(event => event.date).sort())];
     const eventsByDate = {};
-    for (let date of dates) {
-      const dateFormatted = date //date.slice(0, 10) //Removing time from date string
-      //eventsByDate[dateFormatted] = events.filter(item => item.dateFormatted === dateFormatted)
+    for (let date of dates) { 
       eventsByDate[date] = events.filter(item => item.date === date)
     }
     return eventsByDate;
@@ -176,7 +173,7 @@ export default function EventsIndex(props) {
 
   let filteredEvents = filterEvents(subsetEvents, categoryFilter);
   let eventsByDate = makeEventsByDateObj(filteredEvents);
-  // 
+  
   const eventElements = Object.keys(eventsByDate).map((date, index) => {
     return (
       <div className="days" key={date}>
