@@ -24,6 +24,7 @@ export default function Register(props) {
     .then((res) => {
       if(res.data === "Email already in use") {
         setError(res.data)
+        props.setisLogin(false)
       } else {
         console.log(res.data.token)
         localStorage.setItem("token", res.data.token)

@@ -10,28 +10,24 @@ export default function Login(props) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("")
 
-  const userLoggedin = async () => {
+  const userLoggedin = async e => {
+    e.preventDefault()
     if (email === "") {
-      setError("this cannot be blank")
+      setError("Email cannot be blank")
       return;
     }
     if (password === "") {
-      setError("this cannot be blank")
+      setError("Password cannot be blank")
       return;
     }
     await axios.post('http://localhost:8001/api/login', { email, password }, { withCredentials: true })
-      .then( async (res) => {
+      .then((res) => {
         if (res.data === "Invalid email or password") {
           setError(res.data)
+          props.setisLogin(false)
         } else {
           props.setisLogin(true);
-          await axios.get('http://localhost:8001/api/cookies', { withCredentials: true })
-          .then((user) => {
-            props.setCurrentUser(user)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
+          localStorage.setItem("token", res.data.token)
         }
       })
       .catch((err) => {
@@ -56,11 +52,7 @@ export default function Login(props) {
       <div className="Login">
         <Form
           id="login-form"
-          onSubmit={event => {
-            event.preventDefault();
-            userLoggedin()
-
-          }}>
+          onSubmit={userLoggedin}>
           <Form.Group size="lg" controlId="formBasicEmail">
             <Form.Control
               type="email"

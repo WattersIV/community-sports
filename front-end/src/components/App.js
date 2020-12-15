@@ -23,19 +23,24 @@ export default function App(props) {
   const [islogin, setisLogin] = useState(false)
   const [currentUser, setCurrentUser] = useState({})//JSON.parse(window.localStorage.getItem('userData')));
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const cookies = await axios.get('http://localhost:8001/api/cookies', { withCredentials: true })
-  //       .then((cookies) => {
-  //         console.log('INSIDE APP', cookies)
-  //         setCurrentUser(cookies) 
-  //       })
-  //       .catch((err) => {
-  //         console.log(err)
-  //       })
-  //   }
-  //   fetchData()
-  // }, [islogin])
+  const checkAuthenticated = async () => {
+    try {
+      const res = await fetch("http://localhost:8001/api/verify", {
+        method: "POST",
+        headers: { jwt_token: localStorage.token }
+      });
+
+      const parseRes = await res.json();
+
+      parseRes === true ? setisLogin(true) : setisLogin(false);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    checkAuthenticated();
+  }, []);
 
   //console.log('after useEffect', currentUser)
 
@@ -46,13 +51,19 @@ export default function App(props) {
           <Route exact path='/'>
             <Main />
           </Route>
-          <Route path='/login'>
-            <Login
-              islogin={islogin}
-              setisLogin={setisLogin}
-              currentUser={currentUser}
-              setCurrentUser={setCurrentUser} />
-          </Route>
+          <Route path='/login'
+            render={props =>
+              !islogin ? (
+                <Login
+                  {...props}
+                  islogin={islogin}
+                  setisLogin={setisLogin}
+                  currentUser={currentUser}
+                  setCurrentUser={setCurrentUser} />
+              ) : (
+                  <Redirect to="/events" />
+                )}
+          />
           <Route path='/register'>
             <Register islogin={islogin} setisLogin={setisLogin} />
           </Route>
