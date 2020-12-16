@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+//Hook to expand heigh of comment box as user tpyes more
 const useDynamicHeightField = (element, value) => {
   useEffect(() => {
     if (!element) return;

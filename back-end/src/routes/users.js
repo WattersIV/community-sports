@@ -1,8 +1,8 @@
 const router = require("express").Router();
+const db = require("../db")
+
 
 // For the routes /events/...
-
-module.exports = db => {
   
   // PUT: User to join event or update info (e.g change team and position) 
 
@@ -106,5 +106,4 @@ module.exports = db => {
      
     });
 
-  return router;
-};
+module.exports = router

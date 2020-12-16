@@ -6,13 +6,10 @@ import { propTypes } from "react-bootstrap/esm/Image";
 import soccerIcon from './soccerIcon.png'
 import axios from 'axios';
 
-
+//Controls height of box when first opened
 const INITIAL_HEIGHT = 46;
 
-/*
- * Read the blog post here:
- * https://letsbuildui.dev/articles/how-to-build-an-expandable-comment-box
- */
+
 export default function CommentBox(props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [commentValue, setCommentValue] = useState("");
@@ -42,10 +39,7 @@ export default function CommentBox(props) {
     e.preventDefault();
     axios.post(`http://localhost:8001/api/events/${props.eventId}/comments`, { userId: props.user.id, comment: commentValue })
       .then(() => {
-      //   return axios.get(`http://localhost:8001/api/events/${props.eventId}/comments`)
-      // })
-      // .then((res) => {
-      props.setComments(prev => [{fullName: `${props.user.first_name} ${props.user.last_name}`, user_id: props.user.id, event_id: props.eventId, comment: commentValue }, ...prev])
+        props.setComments(prev => [{ fullName: `${props.user.first_name} ${props.user.last_name}`, user_id: props.user.id, event_id: props.eventId, comment: commentValue }, ...prev])
       })
   };
   return (

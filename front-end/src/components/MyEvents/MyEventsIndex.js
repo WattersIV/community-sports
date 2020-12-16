@@ -1,4 +1,4 @@
-import { Redirect, useRouteMatch , Link, useParams} from 'react-router-dom';
+import { Redirect, useRouteMatch, Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { React, useState, useEffect } from 'react';
 import EventFilter from '../Events/EventFilter';
@@ -6,25 +6,21 @@ import EventFilter from '../Events/EventFilter';
 import { Button } from 'react-bootstrap';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap/';
 import Card from 'react-bootstrap/Card'
-// import './Events.scss'
 
-export default function MyEventsIndex (props) {
-  // const {subset} = useParams();
-  // console.log(props);
+export default function MyEventsIndex(props) {
   const [events, setEvents] = useState([{}]);
 
   useEffect(() => {
     axios.get(`/events/users/${props.currentUser.id}`)
-    .then( res => 
-      setEvents(res.data)
-    )
+      .then(res =>
+        setEvents(res.data)
+      )
   }, [])
 
-  // console.log(events)  
 
- return (
-  <h1>hello</h1>
- )
+  return (
+    <h1>hello</h1>
+  )
 }
 
 // const { path } = useRouteMatch();
@@ -110,7 +106,7 @@ export default function MyEventsIndex (props) {
 //             </Card.Body>
 //             </Card.Link>
 //           </Card>
-          
+
 //           </div>
 //         )
 //       }) 
@@ -130,7 +126,7 @@ export default function MyEventsIndex (props) {
 //           <NavDropdown.Item href="#action/3.2">Past Events</NavDropdown.Item>
 //           <NavDropdown.Item href="#action/3.3">My Events</NavDropdown.Item>
 //         </NavDropdown>
-     
+
 //     </Nav> 
 //     {props.currentUser &&
 //     <Nav className="justify-content-end">
