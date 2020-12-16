@@ -64,6 +64,7 @@ Users can also create a game by using the create event form and filling in all t
 * pg
 * uuid
 * ws
+* jsonwebtoken
 
 ## Setup
 1. Download the project folder.
