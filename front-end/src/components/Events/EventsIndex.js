@@ -88,8 +88,10 @@ export default function EventsIndex(props) {
       } else {
         if (isUpcoming === 'Upcoming') {
           selectedEvents = filterEvents(all[2].data, categoryFilter)
+          console.log('My upcoming', all[2].data)
         } else {
           selectedEvents = filterEvents(all[3].data, categoryFilter)
+          console.log('My upcoming', selectedEvents)
         }
       }
 

@@ -128,7 +128,7 @@ export default function EventForm({ newEvent, setnewEvent, newEventfunction, can
             placeholder="Gender"
             onChange={(event) => setnewEvent({ ...newEvent, gender_restriction: event.target.value })}
           > <option> Choose Gender Restriction</option>
-            <option> Male only</option>
+            <option> Male Only</option>
             <option> Female Only</option>
             <option> Other Only</option>
             <option> None</option>
@@ -142,9 +142,9 @@ export default function EventForm({ newEvent, setnewEvent, newEventfunction, can
             value={newEvent.referee}
             placeholder="Referee?"
             onChange={(event) => setnewEvent({ ...newEvent, referee: event.target.value })}
-          > <option> Referee </option>
-            <option> TRUE </option>
-            <option> FALSE</option>
+          > <option> Do you want a Referee? </option>
+            <option value='TRUE'> Yes </option>
+            <option value='FALSE'> No</option>
           </Form.Control>
         </Form.Group>
 
@@ -156,8 +156,8 @@ export default function EventForm({ newEvent, setnewEvent, newEventfunction, can
             placeholder="Choose your team"
             onChange={(event) => setnewEvent({ ...newEvent, team: event.target.value })}
           > <option> Choose Your Team </option>
-            <option> Team1 </option>
-            <option> Team2 </option>
+            <option value='1'> Team 1 </option>
+            <option value='2'> Team 2 </option>
           </Form.Control>
         </Form.Group>
 
@@ -171,7 +171,7 @@ export default function EventForm({ newEvent, setnewEvent, newEventfunction, can
           > <option> Choose Your Position </option>
             <option> Goalie </option>
             <option> Striker </option>
-            <option> Midfield </option>
+            <option> Midfielder </option>
             <option> Defender </option>
           </Form.Control>
         </Form.Group>

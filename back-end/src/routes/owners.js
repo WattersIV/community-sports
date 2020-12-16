@@ -8,6 +8,7 @@ router.post("/owners/events/new", (req, res) => {
   const { owner_id, date, start_time, end_time, title,
     address, city, province, max_participants, skill_level,
     gender_restriction, referee, additional_info } = req.body
+    console.log('req.body', req.body)
 
   const current_participants = 1;
 
@@ -26,6 +27,7 @@ router.post("/owners/events/new", (req, res) => {
     })
     .then(() => {
       //Making a new event
+      console.log('Making event...')
       return db.query(` 
         INSERT INTO events (owner_id , date, start_time, end_time, title,
           address, city, province, current_participants, max_participants, skill_level, 
@@ -41,14 +43,15 @@ router.post("/owners/events/new", (req, res) => {
       //When it saved
       const eventId = rows[0].id;
       const ownerId = rows[0].owner_id;
-      const { my_team, my_position } = req.body;
+      const { team, position } = req.body;
+      console.log('eventid', eventId, 'ownerId', ownerId, 'team', team, 'position', position) //Needs last 2 are undef - needs to be {team, position}
 
       db.query(`
         INSERT INTO teams (event_id, user_id, team_number, position) 
         VALUES
         ($1, $2, $3, $4);
         `,
-        [eventId, ownerId, my_team, my_position]);
+        [eventId, ownerId, team, position]);
     })
     .then(() => {
       res.send('Event created and owner inserted into teams successfully');
