@@ -8,8 +8,7 @@ router.post("/owners/events/new", (req, res) => {
   const { owner_id, date, start_time, end_time, title,
     address, city, province, max_participants, skill_level,
     gender_restriction, referee, additional_info } = req.body
-    console.log('req.body', req.body)
-
+    
   const current_participants = 1;
 
   let location
@@ -44,7 +43,6 @@ router.post("/owners/events/new", (req, res) => {
       const eventId = rows[0].id;
       const ownerId = rows[0].owner_id;
       const { team, position } = req.body;
-      console.log('eventid', eventId, 'ownerId', ownerId, 'team', team, 'position', position) //Needs last 2 are undef - needs to be {team, position}
 
       db.query(`
         INSERT INTO teams (event_id, user_id, team_number, position) 
